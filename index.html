@@ -1,0 +1,1209 @@
+<!doctype html>
+<html lang="kk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Үлес әлемі — 4-сынып математика ойыны</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        font-family:
+          "Nunito", "Comic Sans MS", "Segoe UI", system-ui, sans-serif;
+        background: linear-gradient(-45deg, #1a0b3d, #3b1670, #0d3b66, #5b0e91);
+        background-size: 400% 400%;
+        animation: bgShift 16s ease infinite;
+        color: #fff;
+        overflow-x: hidden;
+        user-select: none;
+      }
+      @keyframes bgShift {
+        0% {
+          background-position: 0 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0 50%;
+        }
+      }
+      #bg {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 0;
+      }
+      .bgSym {
+        position: absolute;
+        top: 0;
+        opacity: 0.22;
+        color: #fff;
+        text-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
+        animation: bgFloat linear infinite;
+      }
+      @keyframes bgFloat {
+        from {
+          transform: translateY(105vh) rotate(0);
+        }
+        to {
+          transform: translateY(-12vh) rotate(340deg);
+        }
+      }
+      .screen {
+        position: relative;
+        z-index: 1;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        perspective: 1000px;
+      }
+      .hidden {
+        display: none !important;
+      }
+
+      /* ---------- СТАРТ ЭКРАН ---------- */
+      .title3d {
+        font-size: clamp(30px, 6vw, 58px);
+        font-weight: 900;
+        letter-spacing: 2px;
+        text-align: center;
+        background: linear-gradient(180deg, #fff7ae, #ffd23f 40%, #ff8f00);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        filter: drop-shadow(0 4px 0 #7b2ff7)
+          drop-shadow(0 8px 18px rgba(0, 0, 0, 0.5));
+        animation: floatY 3s ease-in-out infinite;
+      }
+      @keyframes floatY {
+        0%,
+        100% {
+          transform: translateY(0) rotateX(0);
+        }
+        50% {
+          transform: translateY(-12px) rotateX(6deg);
+        }
+      }
+      .subtitle {
+        margin-top: 8px;
+        text-align: center;
+        font-size: 20px;
+        color: #c9b6ff;
+        letter-spacing: 3px;
+      }
+      .mascot {
+        font-size: 90px;
+        margin: 22px 0 8px;
+        animation: bounce 1.6s ease-in-out infinite;
+        filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.45));
+      }
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0) scale(1);
+        }
+        50% {
+          transform: translateY(-18px) scale(1.06);
+        }
+      }
+      .rules {
+        background: rgba(255, 255, 255, 0.08);
+        border: 2px dashed rgba(255, 255, 255, 0.35);
+        border-radius: 20px;
+        padding: 16px 22px;
+        line-height: 2;
+        font-size: 17px;
+        backdrop-filter: blur(6px);
+        max-width: 560px;
+        text-align: left;
+      }
+      .bigBtn {
+        margin-top: 26px;
+        padding: 18px 40px;
+        font-size: 22px;
+        font-weight: 900;
+        color: #3a1200;
+        background: linear-gradient(180deg, #ffe259, #ffa751);
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        box-shadow:
+          0 8px 0 #c96f00,
+          0 16px 30px rgba(0, 0, 0, 0.45);
+        transition:
+          transform 0.12s,
+          box-shadow 0.12s;
+        letter-spacing: 1px;
+        font-family: inherit;
+      }
+      .bigBtn:hover {
+        transform: translateY(-3px) scale(1.03);
+        box-shadow:
+          0 11px 0 #c96f00,
+          0 20px 36px rgba(0, 0, 0, 0.5);
+      }
+      .bigBtn:active {
+        transform: translateY(4px);
+        box-shadow:
+          0 3px 0 #c96f00,
+          0 8px 16px rgba(0, 0, 0, 0.4);
+      }
+
+      /* ---------- HUD ---------- */
+      .hud {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        justify-content: space-between;
+        width: min(820px, 94vw);
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+      }
+      .hudItem {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 16px;
+        padding: 10px 16px;
+        font-weight: 800;
+        font-size: 16px;
+        backdrop-filter: blur(6px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+      }
+      .score {
+        background: linear-gradient(145deg, #ffd23f33, #ff8f0033);
+        border-color: #ffd23f88;
+        color: #ffe9a3;
+      }
+      .bump {
+        animation: bump 0.5s;
+      }
+      @keyframes bump {
+        30% {
+          transform: scale(1.25) rotate(-3deg);
+        }
+        60% {
+          transform: scale(0.95);
+        }
+      }
+      .pStar {
+        margin: 0 2px;
+        font-size: 15px;
+        opacity: 0.9;
+        display: inline-block;
+      }
+      .pStar.done {
+        animation: popStar 0.4s;
+      }
+      .pStar.cur {
+        animation: curPulse 1s ease-in-out infinite;
+      }
+      @keyframes popStar {
+        0% {
+          transform: scale(0);
+        }
+        70% {
+          transform: scale(1.5);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      @keyframes curPulse {
+        50% {
+          transform: scale(1.35);
+        }
+      }
+
+      /* ---------- САХНА ---------- */
+      .scene {
+        width: min(820px, 94vw);
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        align-items: center;
+      }
+      .qCard {
+        display: flex;
+        gap: 24px;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        background: linear-gradient(
+          145deg,
+          rgba(255, 255, 255, 0.16),
+          rgba(255, 255, 255, 0.05)
+        );
+        border: 2px solid rgba(255, 255, 255, 0.28);
+        border-radius: 28px;
+        padding: 22px 30px;
+        box-shadow:
+          0 20px 45px rgba(0, 0, 0, 0.45),
+          inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        transform-style: preserve-3d;
+        transition: transform 0.15s ease-out;
+        backdrop-filter: blur(8px);
+      }
+      .pieWrap {
+        width: 170px;
+        height: 170px;
+        transform: rotateX(22deg);
+        transform-style: preserve-3d;
+        animation: pieFloat 4s ease-in-out infinite;
+        filter: drop-shadow(0 16px 14px rgba(0, 0, 0, 0.4));
+      }
+      @keyframes pieFloat {
+        0%,
+        100% {
+          transform: rotateX(22deg) rotateZ(-3deg);
+        }
+        50% {
+          transform: rotateX(28deg) rotateZ(3deg) translateY(-6px);
+        }
+      }
+      .pieSvg {
+        width: 100%;
+        height: 100%;
+      }
+      .sliceHot {
+        animation: slicePulse 1.4s ease-in-out infinite;
+      }
+      @keyframes slicePulse {
+        0%,
+        100% {
+          filter: drop-shadow(0 0 8px rgba(255, 210, 63, 0.9));
+        }
+        50% {
+          filter: drop-shadow(0 0 22px rgba(255, 210, 63, 1));
+        }
+      }
+      .qText {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        align-items: center;
+      }
+      .fraction {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 34px;
+        font-weight: 900;
+        color: #ffd23f;
+        text-shadow: 0 0 14px rgba(255, 210, 63, 0.8);
+        line-height: 1.05;
+      }
+      .frLine {
+        width: 46px;
+        height: 4px;
+        background: #ffd23f;
+        border-radius: 2px;
+        margin: 3px 0;
+        box-shadow: 0 0 10px rgba(255, 210, 63, 0.9);
+      }
+      .qTitle {
+        font-size: clamp(19px, 3.4vw, 26px);
+        font-weight: 800;
+        text-align: center;
+        max-width: 380px;
+      }
+      .qTitle b {
+        color: #7dffce;
+        text-shadow: 0 0 12px rgba(125, 255, 206, 0.7);
+      }
+      .hint {
+        font-size: 15px;
+        background: rgba(125, 255, 206, 0.12);
+        border: 1px dashed #7dffce88;
+        padding: 8px 14px;
+        border-radius: 12px;
+        color: #c8ffe9;
+        animation: popStar 0.4s;
+      }
+
+      /* ---------- ЖАУАП ҰЯШЫҒЫ ---------- */
+      .dropZone {
+        position: relative;
+        width: min(340px, 80vw);
+        min-height: 110px;
+        border-radius: 24px;
+        border: 3px dashed #ffd23f;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        background: rgba(255, 210, 63, 0.07);
+        animation: glowPulse 1.8s ease-in-out infinite;
+        transition:
+          transform 0.2s,
+          background 0.2s,
+          border-color 0.2s;
+      }
+      @keyframes glowPulse {
+        0%,
+        100% {
+          box-shadow:
+            0 0 12px rgba(255, 210, 63, 0.35),
+            inset 0 0 14px rgba(255, 210, 63, 0.12);
+        }
+        50% {
+          box-shadow:
+            0 0 34px rgba(255, 210, 63, 0.85),
+            inset 0 0 26px rgba(255, 210, 63, 0.3);
+        }
+      }
+      .dzEmoji {
+        font-size: 34px;
+        animation: bounce 1.6s infinite;
+        pointer-events: none;
+      }
+      .dzText {
+        font-weight: 800;
+        color: #ffe9a3;
+        font-size: 16px;
+        text-align: center;
+        pointer-events: none;
+      }
+      .dropZone.hover {
+        transform: scale(1.08);
+        background: rgba(255, 210, 63, 0.2);
+        border-style: solid;
+      }
+      .dropZone.correct {
+        border-style: solid;
+        border-color: #43e97b;
+        background: rgba(67, 233, 123, 0.18);
+        box-shadow:
+          0 0 40px rgba(67, 233, 123, 0.9),
+          inset 0 0 30px rgba(67, 233, 123, 0.35);
+        animation: none;
+      }
+      .dropZone.wrongShake {
+        border-color: #ff5e62;
+        background: rgba(255, 94, 98, 0.16);
+        animation: shake 0.5s;
+        box-shadow: 0 0 30px rgba(255, 94, 98, 0.8);
+      }
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        20% {
+          transform: translateX(-12px) rotate(-2deg);
+        }
+        40% {
+          transform: translateX(12px) rotate(2deg);
+        }
+        60% {
+          transform: translateX(-8px);
+        }
+        80% {
+          transform: translateX(8px);
+        }
+      }
+
+      /* ---------- ЖАУАП КАРТАЛАРЫ ---------- */
+      .answers {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(90px, 140px));
+        gap: 16px;
+        justify-content: center;
+        width: 100%;
+      }
+      @media (max-width: 560px) {
+        .answers {
+          grid-template-columns: repeat(2, minmax(110px, 1fr));
+        }
+      }
+      .ansGhost {
+        opacity: 0;
+      }
+      .answer {
+        position: relative;
+        height: 96px;
+        border-radius: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: grab;
+        touch-action: none;
+        box-shadow:
+          0 10px 0 rgba(0, 0, 0, 0.35),
+          0 18px 26px rgba(0, 0, 0, 0.4),
+          inset 0 2px 6px rgba(255, 255, 255, 0.6);
+        transition:
+          transform 0.15s,
+          box-shadow 0.15s,
+          opacity 0.4s;
+        border: 3px solid rgba(255, 255, 255, 0.55);
+      }
+      .answer:hover {
+        transform: translateY(-6px) rotate(-2deg) scale(1.05);
+        box-shadow:
+          0 14px 0 rgba(0, 0, 0, 0.35),
+          0 24px 34px rgba(0, 0, 0, 0.45),
+          inset 0 2px 6px rgba(255, 255, 255, 0.6);
+      }
+      .answer.dragging {
+        cursor: grabbing;
+        transition: none;
+        box-shadow: 0 24px 40px rgba(0, 0, 0, 0.55);
+      }
+      .ansNum {
+        font-size: 42px;
+        font-weight: 900;
+        color: #fff;
+        text-shadow:
+          0 3px 0 rgba(0, 0, 0, 0.35),
+          0 0 16px rgba(255, 255, 255, 0.55);
+        pointer-events: none;
+      }
+      .ansShine {
+        position: absolute;
+        top: 8px;
+        left: 12%;
+        width: 76%;
+        height: 26%;
+        border-radius: 50%;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.75),
+          rgba(255, 255, 255, 0)
+        );
+        pointer-events: none;
+      }
+      .boing {
+        animation: boing 0.5s;
+      }
+      @keyframes boing {
+        30% {
+          transform: scale(0.85, 0.8);
+        }
+        60% {
+          transform: scale(1.15, 1.2);
+        }
+        80% {
+          transform: scale(0.97);
+        }
+      }
+      .wrongCard {
+        box-shadow:
+          0 0 0 5px #ff5e62,
+          0 10px 0 rgba(0, 0, 0, 0.35),
+          0 0 30px rgba(255, 94, 98, 0.9) !important;
+      }
+      .fadeAway {
+        opacity: 0.15;
+        transform: scale(0.9);
+        pointer-events: none;
+      }
+
+      /* ---------- ЭФФЕКТТЕР ---------- */
+      #fx {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 50;
+        overflow: hidden;
+      }
+      .spark {
+        position: fixed;
+        transform: translate(-50%, -50%);
+        animation: sparkFly 0.95s cubic-bezier(0.2, 0.7, 0.4, 1) forwards;
+        z-index: 52;
+      }
+      @keyframes sparkFly {
+        0% {
+          opacity: 1;
+          transform: translate(-50%, -50%) scale(1);
+        }
+        100% {
+          opacity: 0;
+          transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy)))
+            scale(0.2) rotate(280deg);
+        }
+      }
+      .confetti {
+        position: fixed;
+        top: -24px;
+        border-radius: 3px;
+        animation: fall linear forwards;
+        z-index: 51;
+      }
+      @keyframes fall {
+        to {
+          transform: translateY(110vh) rotate(720deg);
+        }
+      }
+      .floatTxt {
+        position: fixed;
+        transform: translate(-50%, -50%);
+        font-weight: 900;
+        font-size: 30px;
+        color: #7dffce;
+        text-shadow:
+          0 0 14px rgba(125, 255, 206, 0.9),
+          0 2px 4px rgba(0, 0, 0, 0.6);
+        animation: floatUp 1.15s ease-out forwards;
+      }
+      @keyframes floatUp {
+        to {
+          transform: translate(-50%, -160px) scale(1.3);
+          opacity: 0;
+        }
+      }
+      .praise {
+        position: fixed;
+        left: 50%;
+        top: 42%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        z-index: 60;
+        animation: praiseIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      }
+      .praiseMain {
+        font-size: clamp(30px, 6vw, 54px);
+        font-weight: 900;
+        letter-spacing: 1px;
+        background: linear-gradient(180deg, #fff, #ffd23f 45%, #ff8f00);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        filter: drop-shadow(0 5px 0 #7b2ff7)
+          drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
+      }
+      .praise.bad .praiseMain {
+        background: linear-gradient(180deg, #ffd0d3, #ff5e62 45%, #c9184a);
+        -webkit-background-clip: text;
+        background-clip: text;
+        filter: drop-shadow(0 5px 0 #7a0d2e)
+          drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
+      }
+      .praiseSub {
+        margin-top: 8px;
+        font-size: 26px;
+        font-weight: 900;
+        color: #7dffce;
+        text-shadow: 0 0 16px rgba(125, 255, 206, 0.8);
+      }
+      @keyframes praiseIn {
+        0% {
+          transform: translate(-50%, -50%) scale(0.2) rotate(-8deg);
+          opacity: 0;
+        }
+        100% {
+          transform: translate(-50%, -50%) scale(1) rotate(0);
+          opacity: 1;
+        }
+      }
+      .praise.out {
+        animation: praiseOut 0.35s forwards;
+      }
+      @keyframes praiseOut {
+        to {
+          transform: translate(-50%, -80%) scale(1.2);
+          opacity: 0;
+        }
+      }
+
+      /* ---------- ФИНАЛ ЭКРАН ---------- */
+      .trophy {
+        font-size: 110px;
+        animation: bounce 1.6s infinite;
+        filter: drop-shadow(0 0 30px rgba(255, 210, 63, 0.9));
+      }
+      .endTitle {
+        font-size: clamp(30px, 6vw, 50px);
+        margin: 10px 0;
+        background: linear-gradient(180deg, #fff, #7dffce);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
+      }
+      .endScore {
+        font-size: 26px;
+        font-weight: 800;
+        margin: 12px 0;
+      }
+      .endScore span {
+        color: #ffd23f;
+        font-size: 40px;
+        text-shadow: 0 0 18px rgba(255, 210, 63, 0.9);
+      }
+      .endStars {
+        font-size: 22px;
+        margin-bottom: 10px;
+        letter-spacing: 2px;
+        text-align: center;
+      }
+      .endStars small {
+        font-size: 16px;
+        color: #c9b6ff;
+      }
+      .endMsg {
+        font-size: 20px;
+        color: #e6dcff;
+        max-width: 520px;
+        text-align: center;
+        line-height: 1.6;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="bg"></div>
+
+    <!-- СТАРТ ЭКРАН -->
+    <section id="startScreen" class="screen">
+      <div class="logo3d">
+        <div class="title3d">🍕 ҮЛЕС ӘЛЕМІ 🍕</div>
+        <div class="subtitle">4-СЫНЫП · МАТЕМАТИКА</div>
+      </div>
+      <div class="mascot">🦊</div>
+      <p class="rules">
+        🎯 Сұрақты оқы да, дұрыс жауапты тап<br />
+        🖐 Жауапты <b>сүйреп</b>, жарқыраған ұяшыққа апар<br />
+        ⭐ Әр дұрыс жауап — ұпай және жұлдыз!
+      </p>
+      <button id="startBtn" class="bigBtn">🚀 ОЙЫНДЫ БАСТАУ</button>
+    </section>
+
+    <!-- ОЙЫН ЭКРАНЫ -->
+    <section id="gameScreen" class="screen hidden">
+      <header class="hud">
+        <div class="hudItem" id="qNum">1 / 8</div>
+        <div class="hudItem score" id="scoreBox">
+          ⭐ Ұпай: <span id="score">0</span>
+        </div>
+        <div class="hudItem" id="progress"></div>
+      </header>
+      <div class="scene">
+        <div class="qCard" id="qCard">
+          <div class="pieWrap" id="pieWrap"></div>
+          <div class="qText">
+            <div class="fraction" id="fraction"></div>
+            <div class="qTitle" id="qTitle"></div>
+            <div class="hint hidden" id="hint"></div>
+          </div>
+        </div>
+        <div class="dropZone" id="dropZone">
+          <span class="dzEmoji">🎁</span>
+          <span class="dzText">Жауапты осында сүйре!</span>
+        </div>
+        <div class="answers" id="answers"></div>
+      </div>
+    </section>
+
+    <!-- ФИНАЛ ЭКРАН -->
+    <section id="endScreen" class="screen hidden">
+      <div class="trophy">🏆</div>
+      <h1 class="endTitle">Ойын аяқталды!</h1>
+      <div class="endScore">Жинаған ұпайың: <span id="finalScore">0</span></div>
+      <div class="endStars" id="finalStars"></div>
+      <div class="endMsg" id="endMsg"></div>
+      <button id="restartBtn" class="bigBtn">🔁 Қайта ойнау</button>
+    </section>
+
+    <div id="fx"></div>
+
+    <script>
+      "use strict";
+      const QUESTIONS = [
+        { num: 8, denom: 2 },
+        { num: 15, denom: 3 },
+        { num: 24, denom: 4 },
+        { num: 35, denom: 5 },
+        { num: 48, denom: 6 },
+        { num: 63, denom: 7 },
+        { num: 80, denom: 8 },
+        { num: 99, denom: 9 },
+      ];
+      const PRAISE = [
+        "Керемет! 🎉",
+        "Тамаша! 🌟",
+        "Бәрекелді! 👏",
+        "Дәл таптың! 🎯",
+        "Сен ғажапсың! 🚀",
+        "Жарайсың! 💎",
+      ];
+      const OOPS = [
+        "Қайта байқап көр! 💪",
+        "Сәл қалды! 🙈",
+        "Тағы бір рет көрейік! 🔁",
+        "Жақынсың! 🤏",
+      ];
+      const PALETTE = [
+        ["#ff9a9e", "#ff5e62", "#c9184a"],
+        ["#a18cd1", "#7b2ff7", "#5a189a"],
+        ["#43e97b", "#38f9d7", "#0a9396"],
+        ["#f6d365", "#fda085", "#e85d04"],
+        ["#4facfe", "#00f2fe", "#0077b6"],
+        ["#fa709a", "#fee140", "#d00000"],
+      ];
+      const EMOJI = ["✨", "⭐", "🌟", "💫", "🎈", "🎉"];
+      const $ = (id) => document.getElementById(id);
+      const state = { idx: 0, score: 0, attempts: 0, stars: [], locked: false };
+
+      /* ---------- ДЫБЫСТАР ---------- */
+      let AC = null;
+      function tone(f, dur = 0.12, type = "sine", vol = 0.18, delay = 0) {
+        try {
+          AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+          const t0 = AC.currentTime + delay;
+          const o = AC.createOscillator(),
+            g = AC.createGain();
+          o.type = type;
+          o.frequency.setValueAtTime(f, t0);
+          g.gain.setValueAtTime(0.0001, t0);
+          g.gain.exponentialRampToValueAtTime(vol, t0 + 0.02);
+          g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+          o.connect(g);
+          g.connect(AC.destination);
+          o.start(t0);
+          o.stop(t0 + dur + 0.05);
+        } catch (e) {}
+      }
+      const sfxPick = () => tone(600, 0.07, "triangle", 0.12);
+      const sfxClick = () => tone(340, 0.06, "square", 0.08);
+      const sfxCorrect = () => {
+        [523, 659, 784, 1047].forEach((f, i) =>
+          tone(f, 0.16, "triangle", 0.2, i * 0.09),
+        );
+      };
+      const sfxWrong = () => {
+        tone(200, 0.22, "sawtooth", 0.12);
+        tone(150, 0.3, "sawtooth", 0.12, 0.12);
+      };
+      const sfxEnd = () => {
+        [523, 659, 784, 880, 1047, 1319].forEach((f, i) =>
+          tone(f, 0.22, "triangle", 0.2, i * 0.12),
+        );
+      };
+
+      /* ---------- ФОНДАҒЫ БЕЛГІЛЕР ---------- */
+      (function makeBg() {
+        const bg = $("bg"),
+          syms = [
+            "½",
+            "⅓",
+            "¼",
+            "⅕",
+            "÷",
+            "×",
+            "＋",
+            "＝",
+            "？",
+            "🍕",
+            "🍫",
+            "⭐",
+            "🧮",
+          ];
+        for (let i = 0; i < 16; i++) {
+          const s = document.createElement("span");
+          s.className = "bgSym";
+          s.textContent = syms[Math.floor(Math.random() * syms.length)];
+          s.style.left = Math.random() * 100 + "vw";
+          s.style.fontSize = 18 + Math.random() * 30 + "px";
+          s.style.animationDuration = 14 + Math.random() * 16 + "s";
+          s.style.animationDelay = -Math.random() * 20 + "s";
+          bg.appendChild(s);
+        }
+      })();
+
+      /* ---------- ШЕҢБЕР ДИАГРАММАСЫ (3D пирог) ---------- */
+      function pieSVG(n) {
+        const S = 200,
+          c = 100,
+          r = 86;
+        let paths = "";
+        for (let i = 0; i < n; i++) {
+          const a0 = -Math.PI / 2 + (i * 2 * Math.PI) / n,
+            a1 = -Math.PI / 2 + ((i + 1) * 2 * Math.PI) / n;
+          const x0 = c + r * Math.cos(a0),
+            y0 = c + r * Math.sin(a0);
+          const x1 = c + r * Math.cos(a1),
+            y1 = c + r * Math.sin(a1);
+          paths += `<path d="M${c},${c} L${x0.toFixed(2)},${y0.toFixed(2)} A${r},${r} 0 0 1 ${x1.toFixed(2)},${y1.toFixed(2)} Z" fill="${i === 0 ? "url(#hotG)" : "#fff"}" stroke="#4a2a7a" stroke-width="4" ${i === 0 ? 'class="sliceHot"' : ""}/>`;
+        }
+        return `<svg viewBox="0 0 200 200" class="pieSvg">
+   <defs><radialGradient id="hotG" cx="35%" cy="30%" r="80%">
+     <stop offset="0%" stop-color="#fff9c4"/><stop offset="55%" stop-color="#ffd23f"/><stop offset="100%" stop-color="#ff9500"/>
+   </radialGradient></defs>
+   <ellipse cx="${c}" cy="${c + 12}" rx="${r}" ry="${r * 0.92}" fill="#1a0b3d" opacity="0.3"/>
+   ${paths}</svg>`;
+      }
+
+      /* ---------- СҰРАҚ ЖҮКТЕУ ---------- */
+      function loadQuestion() {
+        const q = QUESTIONS[state.idx];
+        state.attempts = 0;
+        state.locked = false;
+        $("qNum").textContent = state.idx + 1 + " / " + QUESTIONS.length;
+        $("pieWrap").innerHTML = pieSVG(q.denom);
+        $("fraction").innerHTML =
+          `<span class="frNum">1</span><span class="frLine"></span><span class="frDen">${q.denom}</span>`;
+        $("qTitle").innerHTML =
+          `<b>${q.num}</b> санының <b>1/${q.denom}</b> үлесін тап!`;
+        $("hint").classList.add("hidden");
+        $("hint").textContent = "";
+        const dz = $("dropZone");
+        dz.className = "dropZone";
+        dz.innerHTML =
+          '<span class="dzEmoji">🎁</span><span class="dzText">Жауапты осында сүйре!</span>';
+        buildAnswers(q);
+        updateProgress();
+      }
+      function shuffle(a) {
+        for (let i = a.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+      }
+      function buildAnswers(q) {
+        const ans = q.num / q.denom;
+        const set = new Set([ans]);
+        const pool = shuffle(
+          [ans - 2, ans - 1, ans + 1, ans + 2, ans + 3, ans - 3].filter(
+            (v) => v > 0 && v !== ans,
+          ),
+        );
+        while (set.size < 4) set.add(pool.pop());
+        const wrap = $("answers");
+        wrap.innerHTML = "";
+        shuffle([...set]).forEach((v, i) => {
+          const d = document.createElement("div");
+          d.className = "answer";
+          const p = PALETTE[(i + state.idx) % PALETTE.length];
+          d.style.background = `linear-gradient(145deg, ${p[0]}, ${p[1]} 60%, ${p[2]})`;
+          d.dataset.value = v;
+          d.innerHTML = `<span class="ansNum">${v}</span><span class="ansShine"></span>`;
+          d.addEventListener("contextmenu", (e) => e.preventDefault());
+          d.addEventListener("pointerdown", (e) => dragStart(e, d));
+          wrap.appendChild(d);
+        });
+      }
+      function updateProgress() {
+        const p = $("progress");
+        p.innerHTML = "";
+        QUESTIONS.forEach((_, i) => {
+          const s = document.createElement("span");
+          if (i < state.stars.length) {
+            s.textContent = "⭐";
+            s.className = "pStar done";
+          } else if (i === state.idx) {
+            s.textContent = "🔵";
+            s.className = "pStar cur";
+          } else {
+            s.textContent = "⚪";
+            s.className = "pStar";
+          }
+          p.appendChild(s);
+        });
+      }
+
+      /* ---------- СҮРЕП АПАРУ ---------- */
+      let drag = null;
+      function dragStart(e, el) {
+        if (state.locked || drag) return;
+        e.preventDefault();
+        sfxPick();
+        const r = el.getBoundingClientRect();
+        const ph = document.createElement("div");
+        ph.className = "ansGhost";
+        ph.style.width = r.width + "px";
+        ph.style.height = r.height + "px";
+        el.parentNode.insertBefore(ph, el);
+        drag = {
+          el,
+          ph,
+          ox: r.left,
+          oy: r.top,
+          w: r.width,
+          h: r.height,
+          x0: e.clientX,
+          y0: e.clientY,
+          moved: false,
+          dx: 0,
+          dy: 0,
+        };
+        el.classList.add("dragging");
+        el.style.position = "fixed";
+        el.style.left = r.left + "px";
+        el.style.top = r.top + "px";
+        el.style.width = r.width + "px";
+        el.style.height = r.height + "px";
+        el.style.margin = "0";
+        el.style.zIndex = 900;
+        if (el.setPointerCapture) el.setPointerCapture(e.pointerId);
+      }
+      document.addEventListener("pointermove", (e) => {
+        if (!drag) return;
+        const dx = e.clientX - drag.x0,
+          dy = e.clientY - drag.y0;
+        if (Math.hypot(dx, dy) > 6) drag.moved = true;
+        drag.dx = dx;
+        drag.dy = dy;
+        drag.el.style.transform = `translate(${dx}px,${dy}px) scale(1.12) rotate(${Math.max(-10, Math.min(10, dx * 0.05))}deg)`;
+        const r = $("dropZone").getBoundingClientRect();
+        const cx = drag.ox + dx + drag.w / 2,
+          cy = drag.oy + dy + drag.h / 2;
+        $("dropZone").classList.toggle(
+          "hover",
+          cx > r.left && cx < r.right && cy > r.top && cy < r.bottom,
+        );
+      });
+      document.addEventListener("pointerup", () => {
+        if (!drag) return;
+        const d = drag;
+        drag = null;
+        $("dropZone").classList.remove("hover");
+        if (!d.moved) {
+          // жай басу — серпілу анимациясы
+          resetCard(d);
+          d.el.classList.add("boing");
+          sfxClick();
+          setTimeout(() => d.el.classList.remove("boing"), 500);
+          return;
+        }
+        const r = $("dropZone").getBoundingClientRect();
+        const cx = d.ox + d.dx + d.w / 2,
+          cy = d.oy + d.dy + d.h / 2;
+        if (cx > r.left && cx < r.right && cy > r.top && cy < r.bottom)
+          evaluate(d);
+        else flyBack(d);
+      });
+      function resetCard(d) {
+        const el = d.el;
+        el.style.position = "";
+        el.style.left = "";
+        el.style.top = "";
+        el.style.width = "";
+        el.style.height = "";
+        el.style.margin = "";
+        el.style.zIndex = "";
+        el.style.transform = "";
+        el.style.transition = "";
+        el.classList.remove("dragging");
+        if (d.ph) d.ph.remove();
+      }
+      function flyBack(d) {
+        d.el.style.transition = "transform .35s cubic-bezier(.34,1.56,.64,1)";
+        d.el.style.transform = "translate(0,0) scale(1) rotate(0deg)";
+        setTimeout(() => resetCard(d), 360);
+      }
+
+      /* ---------- ЖАУАПТЫ ТЕКСЕРУ ---------- */
+      function evaluate(d) {
+        const q = QUESTIONS[state.idx],
+          ans = q.num / q.denom,
+          val = +d.el.dataset.value,
+          dz = $("dropZone");
+        if (val === ans) {
+          state.locked = true;
+          const r = dz.getBoundingClientRect();
+          const tx = r.left + r.width / 2 - (d.ox + d.dx + d.w / 2),
+            ty = r.top + r.height / 2 - (d.oy + d.dy + d.h / 2);
+          d.el.style.transition = "transform .45s cubic-bezier(.34,1.56,.64,1)";
+          d.el.style.transform = `translate(${d.dx + tx}px,${d.dy + ty}px) scale(0.92) rotate(0deg)`;
+          document.querySelectorAll(".answer").forEach((a) => {
+            if (a !== d.el) a.classList.add("fadeAway");
+          });
+          dz.classList.add("correct");
+          dz.innerHTML =
+            '<span class="dzEmoji">🎉</span><span class="dzText">Дұрыс!</span>';
+          let pts, star;
+          if (state.attempts === 0) {
+            pts = 100;
+            star = 3;
+          } else if (state.attempts === 1) {
+            pts = 60;
+            star = 2;
+          } else {
+            pts = 30;
+            star = 1;
+          }
+          state.score += pts;
+          state.stars.push(star);
+          $("score").textContent = state.score;
+          const sb = $("scoreBox");
+          sb.classList.remove("bump");
+          void sb.offsetWidth;
+          sb.classList.add("bump");
+          floatText("+" + pts, r.left + r.width / 2, r.top);
+          sfxCorrect();
+          sparkleBurst(r.left + r.width / 2, r.top + r.height / 2);
+          confettiRain(70);
+          showPraise(
+            PRAISE[Math.floor(Math.random() * PRAISE.length)],
+            `+${pts} ұпай!`,
+          );
+          updateProgress();
+          setTimeout(() => {
+            state.idx++;
+            if (state.idx >= QUESTIONS.length) endGame();
+            else loadQuestion();
+          }, 1700);
+        } else {
+          state.attempts++;
+          sfxWrong();
+          dz.classList.add("wrongShake");
+          d.el.classList.add("wrongCard");
+          showPraise(OOPS[Math.floor(Math.random() * OOPS.length)], null, true);
+          const h = $("hint");
+          h.textContent = `💡 Кеңес: ${q.num} ÷ ${q.denom} = ?`;
+          h.classList.remove("hidden");
+          setTimeout(() => {
+            dz.classList.remove("wrongShake");
+            d.el.classList.remove("wrongCard");
+            flyBack(d);
+          }, 550);
+        }
+      }
+
+      /* ---------- ЭФФЕКТТЕР ---------- */
+      function sparkleBurst(x, y) {
+        for (let i = 0; i < 16; i++) {
+          const s = document.createElement("span");
+          s.className = "spark";
+          s.textContent = EMOJI[Math.floor(Math.random() * EMOJI.length)];
+          const a = Math.random() * Math.PI * 2,
+            dist = 60 + Math.random() * 110;
+          s.style.setProperty("--dx", Math.cos(a) * dist + "px");
+          s.style.setProperty("--dy", Math.sin(a) * dist + "px");
+          s.style.left = x + "px";
+          s.style.top = y + "px";
+          s.style.fontSize = 16 + Math.random() * 20 + "px";
+          $("fx").appendChild(s);
+          setTimeout(() => s.remove(), 1000);
+        }
+      }
+      function confettiRain(n) {
+        const colors = [
+          "#ff5e62",
+          "#ffd23f",
+          "#43e97b",
+          "#4facfe",
+          "#fa709a",
+          "#b388ff",
+          "#ff9f1c",
+        ];
+        for (let i = 0; i < n; i++) {
+          const c = document.createElement("i");
+          c.className = "confetti";
+          c.style.left = Math.random() * 100 + "vw";
+          c.style.background =
+            colors[Math.floor(Math.random() * colors.length)];
+          c.style.animationDuration = 2 + Math.random() * 2 + "s";
+          c.style.animationDelay = Math.random() * 0.6 + "s";
+          c.style.width = c.style.height = 6 + Math.random() * 8 + "px";
+          if (Math.random() < 0.5) c.style.borderRadius = "50%";
+          $("fx").appendChild(c);
+          setTimeout(() => c.remove(), 5000);
+        }
+      }
+      function floatText(txt, x, y) {
+        const t = document.createElement("div");
+        t.className = "floatTxt";
+        t.textContent = txt;
+        t.style.left = x + "px";
+        t.style.top = y + "px";
+        $("fx").appendChild(t);
+        setTimeout(() => t.remove(), 1200);
+      }
+      function showPraise(main, sub, bad = false) {
+        const p = document.createElement("div");
+        p.className = "praise" + (bad ? " bad" : "");
+        p.innerHTML = `<div class="praiseMain">${main}</div>${sub ? `<div class="praiseSub">${sub}</div>` : ""}`;
+        $("fx").appendChild(p);
+        setTimeout(() => p.classList.add("out"), 900);
+        setTimeout(() => p.remove(), 1300);
+      }
+
+      /* ---------- ФИНАЛ ---------- */
+      function endGame() {
+        $("gameScreen").classList.add("hidden");
+        $("endScreen").classList.remove("hidden");
+        $("finalScore").textContent = state.score;
+        const total = state.stars.reduce((a, b) => a + b, 0);
+        $("finalStars").innerHTML =
+          (total > 12
+            ? "⭐".repeat(12) + " …"
+            : "⭐".repeat(Math.max(total, 1))) +
+          `<br><small>${total} / ${QUESTIONS.length * 3} жұлдыз</small>`;
+        const r = state.score / (QUESTIONS.length * 100);
+        $("endMsg").textContent =
+          r >= 0.9
+            ? "🏆 Керемет нәтиже! Сен нағыз математиксің!"
+            : r >= 0.6
+              ? "🎉 Өте жақсы! Тағы сәл жаттықсаң — мінсіз!"
+              : r >= 0.3
+                ? "💪 Жақсы бастама! Қайта көріп, жаттығайық!"
+                : "🌱 Ештеңе емес! Қайта ойнап, үйреніп ал!";
+        sfxEnd();
+        confettiRain(120);
+        const iv = setInterval(
+          () =>
+            sparkleBurst(
+              Math.random() * innerWidth,
+              Math.random() * innerHeight * 0.6,
+            ),
+          600,
+        );
+        setTimeout(() => clearInterval(iv), 3500);
+      }
+      function startGame() {
+        state.idx = 0;
+        state.score = 0;
+        state.attempts = 0;
+        state.stars = [];
+        state.locked = false;
+        $("score").textContent = "0";
+        $("startScreen").classList.add("hidden");
+        $("endScreen").classList.add("hidden");
+        $("gameScreen").classList.remove("hidden");
+        loadQuestion();
+      }
+      $("startBtn").addEventListener("click", () => {
+        sfxClick();
+        startGame();
+      });
+      $("restartBtn").addEventListener("click", () => {
+        sfxClick();
+        startGame();
+      });
+
+      /* ---------- САУАЛ КАРТАСЫНЫҢ 3D ЕҢКЕЮІ ---------- */
+      $("gameScreen").addEventListener("pointermove", (e) => {
+        if (drag) return;
+        const card = $("qCard"),
+          r = card.getBoundingClientRect();
+        const px = (e.clientX - (r.left + r.width / 2)) / r.width;
+        const py = (e.clientY - (r.top + r.height / 2)) / r.height;
+        card.style.transform = `rotateY(${px * 8}deg) rotateX(${-py * 6}deg)`;
+      });
+      $("gameScreen").addEventListener(
+        "pointerleave",
+        () => ($("qCard").style.transform = ""),
+      );
+    </script>
+  </body>
+</html>
